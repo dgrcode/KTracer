@@ -25,6 +25,10 @@ class Vector(val x: Double, val y: Double, val z: Double) {
         return Vector(x * d, y * d, z * d)
     }
 
+    override fun toString() : String {
+        return "[ " + x + ", " + y + ", " + z + " ]"
+    }
+
     fun modulo() : Double {
         return Math.sqrt(Math.pow(x, 2.0) + Math.pow(y, 2.0) + Math.pow(z, 2.0))
     }
@@ -35,13 +39,17 @@ class Vector(val x: Double, val y: Double, val z: Double) {
     }
 
     fun randomCentered() : Vector {
-        val phi = Math.random() * Math.PI
-        val theta = Math.random() * Math.PI
-        val randVect = Vector(
-                Math.cos(phi) * Math.cos(theta),
-                Math.cos(phi) * Math.sin(theta),
-                Math.sin(phi))
+        var test = Vector(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
+        while (test.modulo() > 1) {
+            test = Vector(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
+        }
 
-        return randVect + this
+        var cand = test.normalize()
+
+        if (cand * this < 0) {
+            cand = -cand
+        }
+
+        return cand
     }
 }

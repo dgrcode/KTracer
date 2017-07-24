@@ -21,6 +21,14 @@ class Color(val r: Float, val g: Float, val b: Float) {
         return Color(r / n, g / n, b / n)
     }
 
+    operator fun div(n: Float) : Color {
+        return Color(r / n, g / n, b / n)
+    }
+
+    fun max() : Float {
+        return Math.max(Math.max(r, g) , b)
+    }
+
     fun toRGB() : ColorRGB {
         return ColorRGB(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255))
     }

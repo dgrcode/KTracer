@@ -9,11 +9,16 @@ object Scene{
         objects.add(obj)
     }
 
-    fun trace(orig: Vector, dir: Vector, iters: Int = 0) : HitRay {
-        var firstHit = HitRay()
+    fun trace(orig: Vector, dir: Vector, iters: Int) : HitRay {
+        var firstHit = HitRay(iters)
         for (obj in objects) {
-            val tempHit = obj.trace(orig, dir)
-            if (tempHit.dist < firstHit.dist) {
+            val tempHit = obj.trace(orig, dir, iters)
+            if (tempHit.hit && tempHit.dist < firstHit.dist) {
+                /* TODO remove DEBUG */
+                /*if (firstHit.name != "<Nothing>") {
+                    println(tempHit.name + " is closer than " + firstHit.name + ": " + tempHit.dist + " < " + firstHit.dist)
+                }*/
+                /* TODO remove DEBUG */
                 firstHit = tempHit
             }
         }

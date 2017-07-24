@@ -3,21 +3,23 @@
  */
 
 class Sphere(val center: Vector, val radius: Double, val material: Material) : Object {
-    override fun trace(orig: Vector, dir: Vector): HitRay {
-        val normDir = dir.normalize()
+    val name = "Sphere"
+
+    override fun trace(orig: Vector, dir: Vector, iters: Int): HitRay {
+        val dirNormalized = dir.normalize()
         val inSqrt =
-                Math.pow((normDir * (orig - center)), 2.0) -
+                Math.pow((dirNormalized * (orig - center)), 2.0) -
                 Math.pow((orig - center).modulo(), 2.0) +
                 Math.pow(radius, 2.0)
 
-        if (inSqrt < 0) return HitRay()
+        if (inSqrt < 0) return HitRay(iters)
 
-        val hitDist = - normDir * (orig - center) - Math.sqrt(inSqrt)
-        val hitPoint = normDir * hitDist
+        val hitDist = - dirNormalized * (orig - center) - Math.sqrt(inSqrt)
+        val hitPoint = dirNormalized * hitDist
         val normalAtHit = getNormalAt(hitPoint)
-        val reflectionVector = normDir - normalAtHit * (normDir * normalAtHit) * 2.0
+        val reflectionVector = dirNormalized - normalAtHit * (dirNormalized * normalAtHit) * 2.0
 
-        return HitRay(true, normDir, normalAtHit, reflectionVector, hitDist, material)
+        return HitRay(true, dirNormalized, normalAtHit, reflectionVector, hitDist, material, iters, name)
     }
 
     fun getNormalAt(point: Vector) : Vector {

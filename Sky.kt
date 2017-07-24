@@ -3,8 +3,10 @@
  */
 
 class Sky(val light: Color) : Object {
-    override fun trace(orig: Vector, dir: Vector): HitRay {
-        if (dir.z < 0) return HitRay()
+    val name = "Sky"
+
+    override fun trace(orig: Vector, dir: Vector, iters: Int): HitRay {
+        if (dir.z < 0) return HitRay(iters)
         return HitRay(5000.0, light)
     }
 }

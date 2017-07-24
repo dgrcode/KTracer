@@ -8,18 +8,20 @@ import java.awt.image.BufferedImage
  */
 
 object params {
-    val iterPerPixel = 10
+    val iterPerPixel = 1
 }
 
 object camera {
     val position = Vector(0.0, 0.0, 0.0)
 }
 
-val lens = Lens(100.0, 400.0, 300, 200)
+val lens = Lens(100.0, 200.0, 300, 200)
 
 fun main(args: Array<String>) {
-    Scene.add(Sphere(Vector(50.0, 300.0, 60.0), 100.0, Material(Albedo(.15f, .15f, .15f), 0f)))
-    Scene.add(Sky(Color(0.3f, 0.6f, 1f)))
+    Scene.add(Sphere(Vector(-60.0, 300.0, 30.0), 100.0, Material(Albedo(.9f, .9f, .9f), 0f)))
+    Scene.add(Sphere(Vector(60.0, 180.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), 0f)))
+    Scene.add(Sky(Color(7f, 7f, 10f)))
+    Scene.add(Plane(Vector(0.0, 0.0, -70.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.65f, 0.7f, 0.7f), 0f)))
 
     val colorMatrix = lens.render()
 

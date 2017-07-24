@@ -15,8 +15,8 @@
  */
 
 interface Object{
-    fun trace(orig: Vector, dir: Vector) : HitRay
+    fun trace(orig: Vector, dir: Vector, iters: Int) : HitRay
     fun trace(dir: Vector): HitRay {
-        return trace(camera.position, dir)
+        return trace(camera.position, dir, 1)
     }
 }

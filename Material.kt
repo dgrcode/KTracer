@@ -12,14 +12,20 @@ data class Material(val isLight: Boolean, val color: Color, val albedo: Albedo, 
             return color
         }
 
-        if (hitRay.iters > 3) {
+        if (hitRay.iters > 10) {
             return Color()
         }
 
-        val randomRay = hitRay.normal.randomCentered().normalize()
-        val bouncedHitRay = Scene.trace(hitRay.dir * hitRay.dist, randomRay, hitRay.iters + 1)
-        val incomingLight = bouncedHitRay.material.shade(bouncedHitRay)
-        val directionCorrection = (hitRay.normal * randomRay).toFloat()
-        return albedo * incomingLight * directionCorrection
+
+        val randomRay = hitRay.normal //.randomCentered()
+        //val nextPoint = hitRay.dir * hitRay.dist + hitRay.normal * 0.01
+        //val bouncedHitRay = Scene.trace(nextPoint, randomRay, hitRay.iters + 1)
+        //val incomingLight = bouncedHitRay.material.shade(bouncedHitRay)
+
+        //val directionCorrection = (hitRay.normal * randomRay).toFloat()
+        return Color(Math.abs(randomRay.z.toFloat()), Math.abs(randomRay.z.toFloat()), Math.abs(randomRay.z.toFloat()))
+        //albedo *
+        //return Color(Math.abs(hitRay.normal.z.toFloat()), Math.abs(hitRay.normal.z.toFloat()), Math.abs(hitRay.normal.z.toFloat()))
+        // incomingLight// * directionCorrection
     }
 }
