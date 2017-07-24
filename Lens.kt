@@ -26,33 +26,36 @@ class Lens(val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
             }))
         })
 
-        var maxColor = 0f
+        //var maxColor = 0f
         for (round in 1..params.iterPerPixel - 1) {
+            //println("\n\nNEXT ROUND\n")
             for (i in colorMatrix.indices) {
                 for (j in colorMatrix[0].indices) {
+                    //print("pixel[" + i + "][" + j + "]: ")
+                    print("\rround: " + round + " -> i: " + i + ", j: " + j)
                     val pixel = pixels[i][j]
                     val ray = pixel.center() - camera.position
                     val normRay = ray.normalize()
                     val hitRay = Scene.trace(camera.position, normRay, 0)
                     val foundColor = hitRay.material.shade(hitRay)
                     //colorMatrix[i][j] = (colorMatrix[i][j] * round + foundColor) / (round + 1)
-                    val newColor = colorMatrix[i][j] + foundColor
-                    val nMaxColor = newColor.max()
-                    if (nMaxColor > maxColor) {
-                        maxColor = nMaxColor
-                    }
+                    val newColor = (colorMatrix[i][j] * round + foundColor) / (round + 1)
+                    //val nMaxColor = newColor.max()
+                    //if (nMaxColor > maxColor) {
+                    //    maxColor = nMaxColor
+                    //}
                     colorMatrix[i][j] = newColor
                 }
             }
         }
 
-        if (maxColor > 1f) {
-            for (i in colorMatrix.indices) {
-                for (j in colorMatrix[i].indices) {
-                    colorMatrix[i][j] = colorMatrix[i][j] / maxColor
-                }
-            }
-        }
+//        if (maxColor > 1f) {
+//            for (i in colorMatrix.indices) {
+//                for (j in colorMatrix[i].indices) {
+//                    colorMatrix[i][j] = colorMatrix[i][j] / maxColor
+//                }
+//            }
+//        }
 
         return colorMatrix
 

@@ -14,7 +14,7 @@ class Plane(val pointInPlane: Vector, val normal: Vector, val material: Material
         if (denominator == 0.0) {
             if (numerator == 0.0) {
                 // Direction is on the surface
-                return HitRay(true, dirNormalized, normal, -dirNormalized, 0.0, material, iters + 1, name)
+                return HitRay(true, orig, dirNormalized, 0.0, normal, -dirNormalized, material, iters + 1, name)
             } else {
                 // No contact point
                 return HitRay(iters)
@@ -29,6 +29,6 @@ class Plane(val pointInPlane: Vector, val normal: Vector, val material: Material
 
         val reflectionVector = dirNormalized - normal * (dirNormalized * normal) * 2.0
 
-        return HitRay(true, dirNormalized, normal, reflectionVector, hitDist, material, iters, name)
+        return HitRay(true, orig, dirNormalized, hitDist, normal, reflectionVector, material, iters, name)
     }
 }

@@ -30,7 +30,11 @@ class Color(val r: Float, val g: Float, val b: Float) {
     }
 
     fun toRGB() : ColorRGB {
-        return ColorRGB(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255))
+        // TODO r, g, b, cannot be more than 1
+        val rCorrection = Math.min(r, 1f)
+        val gCorrection = Math.min(g, 1f)
+        val bCorrection = Math.min(b, 1f)
+        return ColorRGB(Math.round(rCorrection * 255), Math.round(gCorrection * 255), Math.round(bCorrection * 255))
     }
 }
 

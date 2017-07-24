@@ -13,7 +13,7 @@ object Scene{
         var firstHit = HitRay(iters)
         for (obj in objects) {
             val tempHit = obj.trace(orig, dir, iters)
-            if (tempHit.hit && tempHit.dist < firstHit.dist) {
+            if (tempHit.hit && tempHit.dist > 0 && tempHit.dist < firstHit.dist) {
                 /* TODO remove DEBUG */
                 /*if (firstHit.name != "<Nothing>") {
                     println(tempHit.name + " is closer than " + firstHit.name + ": " + tempHit.dist + " < " + firstHit.dist)
@@ -22,6 +22,10 @@ object Scene{
                 firstHit = tempHit
             }
         }
+//        for (i in 1..iters) {
+//            print("  ")
+//        }
+//        print(firstHit.dist.toString() + " " + firstHit.name + firstHit.dir +"\n")
         return firstHit
     }
 }

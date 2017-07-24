@@ -19,7 +19,7 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
         val normalAtHit = getNormalAt(hitPoint)
         val reflectionVector = dirNormalized - normalAtHit * (dirNormalized * normalAtHit) * 2.0
 
-        return HitRay(true, dirNormalized, normalAtHit, reflectionVector, hitDist, material, iters, name)
+        return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, reflectionVector, material, iters, name)
     }
 
     fun getNormalAt(point: Vector) : Vector {
