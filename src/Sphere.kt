@@ -14,7 +14,18 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
 
         if (inSqrt < 0) return HitRay(iters)
 
-        val hitDist = - dirNormalized * (orig - center) - Math.sqrt(inSqrt)
+        val hitDistNeg = - dirNormalized * (orig - center) - Math.sqrt(inSqrt)
+        val hitDistPos = - dirNormalized * (orig - center) + Math.sqrt(inSqrt)
+        if (hitDistNeg < 0 && hitDistPos < 0) {
+            return HitRay(iters)
+        }
+        var hitDist: Double = 0.0
+        if (hitDistNeg > 0 && hitDistPos > 0) {
+            hitDist = Math.min(hitDistNeg, hitDistPos)
+        } else {
+            hitDist = Math.max(hitDistNeg, hitDistPos)
+        }
+
         val hitPoint = dirNormalized * hitDist
         val normalAtHit = getNormalAt(hitPoint)
         val reflectionVector = dirNormalized - normalAtHit * (dirNormalized * normalAtHit) * 2.0
