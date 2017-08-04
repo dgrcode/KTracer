@@ -4,6 +4,7 @@
 
 class Albedo(val r: Float, val g: Float, val b: Float) {
     constructor() : this (0f, 0f, 0f)
+    constructor(n: Float) : this (n, n, n)
 
     operator fun times(color: Color) : Color {
         return Color(r * color.r, g * color.g, b * color.b)

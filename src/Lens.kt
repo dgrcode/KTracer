@@ -17,11 +17,15 @@ class Lens(val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
 
     fun render() : ArrayList<ArrayList<Color>> {
 
+        val round = 1
+        var p = 0
         val colorMatrix: ArrayList<ArrayList<Color>> = ArrayList(pixels.map { arrayPix ->
             ArrayList(arrayPix.map( fun(pixel: Pixel): Color{
-                val ray = pixel.center() - camera.position
+                print("\rround: " + round + " -> pixel: " + Math.floor(p / params.xRes * 1.0).toInt() + "," + p % params.xRes + " ")
+                val ray = pixel.getRandomPoint() - camera.position
                 val normRay = ray.normalize()
                 val hitRay = Scene.trace(camera.position, normRay, 0)
+                p++
                 return hitRay.material.shade(hitRay)
             }))
         })
@@ -32,9 +36,9 @@ class Lens(val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
             for (i in colorMatrix.indices) {
                 for (j in colorMatrix[0].indices) {
                     //print("pixel[" + i + "][" + j + "]: ")
-                    print("\rround: " + round + " -> i: " + i + ", j: " + j)
+                    print("\rround: " + (round +1) + " -> i: " + i + ", j: " + j)
                     val pixel = pixels[i][j]
-                    val ray = pixel.center() - camera.position
+                    val ray = pixel.getRandomPoint() - camera.position
                     val normRay = ray.normalize()
                     val hitRay = Scene.trace(camera.position, normRay, 0)
                     val foundColor = hitRay.material.shade(hitRay)
@@ -59,5 +63,11 @@ class Lens(val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
 
         return colorMatrix
 
+    }
+
+    fun getRandomPixel() : Pixel {
+        val y = Math.random() * (yRes + 1)
+        val x = Math.random() * (xRes + 1)
+        return pixels[y.toInt()][x.toInt()]
     }
 }

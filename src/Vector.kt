@@ -1,3 +1,5 @@
+import java.util.*
+
 /**
  * Created by daniel on 20/07/17.
  */
@@ -25,6 +27,10 @@ class Vector(val x: Double, val y: Double, val z: Double) {
         return Vector(x * d, y * d, z * d)
     }
 
+    operator fun times(n: Int) : Vector {
+        return Vector(x * n, y * n, z * n)
+    }
+
     override fun toString() : String {
         return "[ " + x + ", " + y + ", " + z + " ]"
     }
@@ -39,17 +45,26 @@ class Vector(val x: Double, val y: Double, val z: Double) {
     }
 
     fun randomCentered() : Vector {
-        var test = Vector(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
+        val randGenerator = Random()
+        var test = Vector(randGenerator.nextDouble() * 2 - 1, randGenerator.nextDouble() * 2 - 1, randGenerator.nextDouble() * 2 - 1)
         while (test.modulo() > 1) {
-            test = Vector(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1)
+            test = Vector(randGenerator.nextDouble() * 2 - 1, randGenerator.nextDouble() * 2 - 1, randGenerator.nextDouble() * 2 - 1)
         }
 
-        var cand = test.normalize()
+        //var cand = test.normalize()
+        var cand = test
 
         if (cand * this < 0) {
             cand = -cand
         }
 
         return cand
+    }
+
+    fun reflectionWithNormal(normal: Vector) : Vector {
+        if (this * normal > 0) {
+            print("HITTING IN THE NORMAL DIRECTION!\n")
+        }
+        return this - normal * (this * normal) * 2.0
     }
 }

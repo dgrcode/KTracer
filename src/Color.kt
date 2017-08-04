@@ -4,6 +4,7 @@
 
 class Color(val r: Float, val g: Float, val b: Float) {
     constructor() : this(0f, 0f, 0f)
+    constructor(n: Float) : this(n, n, n)
 
     operator fun plus(other: Color) : Color {
         return Color(r + other.r, g + other.g, b + other.b)

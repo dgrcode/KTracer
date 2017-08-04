@@ -8,23 +8,32 @@ import java.awt.image.BufferedImage
  */
 
 object params {
-    val iterPerPixel = 30
+    val iterPerPixel = 500
+    val recursionLimit = 10
+    val xRes = 500
+    val yRes = 300
+    val debRadius = 0.5
+    val bias = 0.001
+
+    val debug = false
 }
 
 object camera {
     val position = Vector(0.0, 0.0, 0.0)
 }
 
-val lens = Lens(100.0, 200.0, 1200, 600)
+val lens = Lens(500.0, 200.0, params.xRes, params.yRes)
 
 fun main(args: Array<String>) {
-    Scene.add(Sphere(Vector(-270.0, 460.0, 90.0), 30.0, Material(Albedo(.1f, .2f, .9f), .5f)))
-    Scene.add(Sphere(Vector(-60.0, 400.0, 30.0), 100.0, Material(Albedo(.9f, .2f, .1f), .9f)))
-    Scene.add(Sphere(Vector(60.0, 280.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .25f)))
-    //Scene.add(Sphere(Vector(-50.0, 280.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
-    //Scene.add(Sphere(Vector(50.0, 280.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
+    //Scene.add(Sphere(Vector(-270.0, 460.0, 90.0), 30.0, Material(Albedo(.1f, .2f, .9f), .5f)))
+    Scene.add(Sphere(Vector(0.0, 1300.0, 40.0), 110.0, Material(Albedo(.9f, .4f, .2f), .7f)))
+    Scene.add(Sphere(Vector(80.0, 900.0, 60.0), 50.0, Material(Albedo(.1f, .9f, .2f), .1f)))
+    //Scene.add(Sphere(Vector(-50.0, 1300.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
+    //Scene.add(Sphere(Vector(50.0, 1300.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
     Scene.add(Sky(Color(1f, 1f, 1f)))
-    Scene.add(Plane(Vector(0.0, 0.0, -70.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.65f, 0.7f, 0.7f), 0f)))
+    Scene.add(Plane(Vector(0.0, 0.0, -70.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), 0f)))
+
+    debugs(lens.getRandomPixel().center())
 
     val colorMatrix = lens.render()
 
@@ -38,5 +47,6 @@ fun main(args: Array<String>) {
 
     val outputFile = File("./output.bmp")
     ImageIO.write(image, "bmp", outputFile)
+    println("\nFinished!")
 
 }
