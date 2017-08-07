@@ -2,14 +2,21 @@
  * Created by daniel on 20/07/17.
  */
 
-class Lens(val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
+class Lens(val cameraPos: Vector, val normalToCamera: Vector, val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
+    constructor(dist: Double, width: Double, xRes: Int, yRes: Int) :
+            this(Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), dist, width, xRes, yRes)
+
     val pixelSize = width / xRes
     val height = yRes * pixelSize
 
     val pixels = Array<Array<Pixel>>(yRes) { i ->
         Array<Pixel>(xRes) { j ->
             Pixel(
-                    Vector(-width / 2 + j * pixelSize, dist, height / 2 - i * pixelSize),
+                    cameraPos + normalToCamera * dist +
+                            getRotationMatirxV2(normalToCamera) * Vector(-width / 2 + j * pixelSize, 0.0, height / 2 - i * pixelSize),
+//                     cameraPos + normalToCamera * dist +
+//                             Vector(-width / 2 + j * pixelSize, 0.0, height / 2 - i * pixelSize),
+                    normalToCamera,
                     pixelSize
             )
         }

@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage
  */
 
 object params {
-    val iterPerPixel = 500
-    val recursionLimit = 10
-    val xRes = 500
-    val yRes = 300
+    val iterPerPixel = 10
+    val recursionLimit = 25
+    val xRes = 600
+    val yRes = 600
     val debRadius = 0.5
     val bias = 0.001
 
@@ -19,21 +19,21 @@ object params {
 }
 
 object camera {
-    val position = Vector(0.0, 0.0, 0.0)
+    val position = Vector(0.0, -1500.0, 200.0)
 }
 
-val lens = Lens(500.0, 200.0, params.xRes, params.yRes)
+val lens = Lens(camera.position, Vector(0.0, 1500.0, -150.0).normalize(), 500.0, 200.0, params.xRes, params.yRes)
 
 fun main(args: Array<String>) {
-    //Scene.add(Sphere(Vector(-270.0, 460.0, 90.0), 30.0, Material(Albedo(.1f, .2f, .9f), .5f)))
-    Scene.add(Sphere(Vector(0.0, 1300.0, 40.0), 110.0, Material(Albedo(.9f, .4f, .2f), .7f)))
-    Scene.add(Sphere(Vector(80.0, 900.0, 60.0), 50.0, Material(Albedo(.1f, .9f, .2f), .1f)))
-    //Scene.add(Sphere(Vector(-50.0, 1300.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
+    Scene.add(Sphere(Vector(-50.0, -450.0, 30.0), 30.0, Material(Albedo(.1f, .2f, .9f), .5f)))
+    Scene.add(Sphere(Vector(60.0, 0.0, 120.0), 120.0, Material(Albedo(.9f, .4f, .2f), .4f)))
+    Scene.add(Sphere(Vector(140.0, -250.0, 70.0), 50.0, Material(Albedo(.1f, .9f, .2f), .1f)))
+    Scene.add(Sphere(Vector(-300.0, 2700.0, 500.0), 500.0, Material(Albedo(.1f, .9f, .2f), .9f)))
     //Scene.add(Sphere(Vector(50.0, 1300.0, 20.0), 50.0, Material(Albedo(.1f, .9f, .2f), .9f)))
     Scene.add(Sky(Color(1f, 1f, 1f)))
-    Scene.add(Plane(Vector(0.0, 0.0, -70.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), 0f)))
+    Scene.add(Plane(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), .3f)))
 
-    debugs(lens.getRandomPixel().center())
+    //debugs()
 
     val colorMatrix = lens.render()
 

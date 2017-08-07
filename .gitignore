@@ -1,3 +1,6 @@
 # Private files
 .*
 !.gitignore
+
+# Compiled files
+/out

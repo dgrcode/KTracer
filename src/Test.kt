@@ -26,6 +26,16 @@ fun debugs(pixelVector: Vector = Vector()) {
     //printRandomReflections()
 
     //printVectorTracing(pixelVector)
+
+    val v = Vector(0.0, 1.0, 0.0)
+    println("Con vector")
+    println(getRotationMatirx(v))
+
+    println("Con angulos")
+    println(getRotationMatrix(0.0, Math.PI / 2))
+
+    println("Con v2")
+    println(getRotationMatirxV2(v))
 }
 
 fun printRandomNormals() {
