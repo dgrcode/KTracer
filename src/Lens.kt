@@ -2,23 +2,26 @@
  * Created by daniel on 20/07/17.
  */
 
-class Lens(val cameraPos: Vector, val normalToCamera: Vector, val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
+class Lens(var cameraPos: Vector, var normalFromCamera: Vector, val dist: Double, val width: Double, val xRes: Int, val yRes: Int){
     constructor(dist: Double, width: Double, xRes: Int, yRes: Int) :
             this(Vector(0.0, 0.0, 0.0), Vector(0.0, 1.0, 0.0), dist, width, xRes, yRes)
 
     val pixelSize = width / xRes
     val height = yRes * pixelSize
 
-    val pixels = Array<Array<Pixel>>(yRes) { i ->
-        Array<Pixel>(xRes) { j ->
-            Pixel(
-                    cameraPos + normalToCamera * dist +
-                            getRotationMatirxV2(normalToCamera) * Vector(-width / 2 + j * pixelSize, 0.0, height / 2 - i * pixelSize),
-//                     cameraPos + normalToCamera * dist +
-//                             Vector(-width / 2 + j * pixelSize, 0.0, height / 2 - i * pixelSize),
-                    normalToCamera,
-                    pixelSize
-            )
+    var rotationMatrix = getRotationMatirxV2(normalFromCamera)
+    var pixels = generatePixels()
+
+    private fun generatePixels() : Array<Array<Pixel>> {
+        return Array<Array<Pixel>>(yRes) { i ->
+            Array<Pixel>(xRes) { j ->
+                Pixel(
+                        cameraPos + normalFromCamera * dist +
+                                rotationMatrix * Vector(-width / 2 + j * pixelSize, 0.0, height / 2 - i * pixelSize),
+                        rotationMatrix,
+                        pixelSize
+                )
+            }
         }
     }
 
@@ -73,8 +76,21 @@ class Lens(val cameraPos: Vector, val normalToCamera: Vector, val dist: Double, 
     }
 
     fun getRandomPixel() : Pixel {
-        val y = Math.random() * (yRes + 1)
-        val x = Math.random() * (xRes + 1)
+        val y = Math.random() * (yRes) // I had +1 here...
+        val x = Math.random() * (xRes) // I had +1 here...
         return pixels[y.toInt()][x.toInt()]
+    }
+
+    fun updateNormalVector (newNormal: Vector) {
+        normalFromCamera = newNormal
+    }
+
+    fun updateCameraPosition (newCameraPos: Vector) {
+        cameraPos = newCameraPos
+    }
+
+    fun regeneratePixels() {
+        rotationMatrix = getRotationMatirx(normalFromCamera)
+        pixels = generatePixels()
     }
 }

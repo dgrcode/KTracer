@@ -41,7 +41,12 @@ class Vector(val x: Double, val y: Double, val z: Double) {
 
     fun normalize() : Vector {
         val mod = modulo()
+        if (mod == .0) return Vector(.0, .0, .0)
         return Vector(x / mod, y / mod, z / mod)
+    }
+
+    fun crossProduct(v: Vector) : Vector {
+        return Vector(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x)
     }
 
     fun randomCentered() : Vector {

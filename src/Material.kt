@@ -27,6 +27,7 @@ data class Material(val isLight: Boolean, val color: Color, val albedo: Albedo, 
         // Debugging returs
         //return Color((randomRay.z.toFloat() + 1) / 2, (randomRay.z.toFloat() + 1) / 2, Math.abs(randomRay.z.toFloat() + 1) / 2)
         //return albedo * incomingBouncedLight * directionCorrection + incomingReflectedLight * reflectivity
+        // Color as albedo
         //return albedo * Color(1f)
 
         /*

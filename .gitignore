@@ -4,3 +4,8 @@
 
 # Compiled files
 /out
+
+# Movie frames
+movieFrames/
+*.bmp
+!RENDERS/*.bmp
