@@ -31,6 +31,14 @@ class Vector(val x: Double, val y: Double, val z: Double) {
         return Vector(x * n, y * n, z * n)
     }
 
+    operator fun times(n: Float) : Vector {
+        return Vector(x * n, y * n, z * n)
+    }
+
+    operator fun div(n: Double) : Vector {
+        return Vector(x / n, y / n, z / n)
+    }
+
     override fun toString() : String {
         return "[ " + x + ", " + y + ", " + z + " ]"
     }
@@ -67,9 +75,18 @@ class Vector(val x: Double, val y: Double, val z: Double) {
     }
 
     fun reflectionWithNormal(normal: Vector) : Vector {
-        if (this * normal > 0) {
-            print("HITTING IN THE NORMAL DIRECTION!\n")
-        }
         return this - normal * (this * normal) * 2.0
+    }
+
+    fun refractionWithNormal(normal: Vector, incomingMediumKr: Double, nextMediumKr: Double) : Vector {
+        var refrNormal = normal
+        if (this * normal > 0) {
+            refrNormal = -normal
+        }
+        val cosIncoming = this * refrNormal
+        val refractivityRelation = incomingMediumKr / nextMediumKr
+        val sinRefractedPw2 = Math.pow(refractivityRelation, 2.0) * 1 - Math.pow(cosIncoming, 2.0)
+
+        return this * refractivityRelation + refrNormal * (cosIncoming * refractivityRelation - Math.sqrt(1 - sinRefractedPw2))
     }
 }

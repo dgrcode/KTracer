@@ -5,7 +5,7 @@
 class Sphere(val center: Vector, val radius: Double, val material: Material) : Object {
     val name = "sphere"
 
-    override fun trace(orig: Vector, dir: Vector, iters: Int): HitRay {
+    override fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double): HitRay {
         val dirNormalized = dir.normalize()
         val inSqrt =
                 Math.pow((dirNormalized * (orig - center)), 2.0) -
@@ -16,8 +16,8 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
 
         val hitDistNeg = - dirNormalized * (orig - center) - Math.sqrt(inSqrt)
         val hitDistPos = - dirNormalized * (orig - center) + Math.sqrt(inSqrt)
-        var smallestDist = minOf(hitDistNeg, hitDistPos)
-        var biggestDist = maxOf(hitDistNeg, hitDistPos)
+        val smallestDist = minOf(hitDistNeg, hitDistPos)
+        val biggestDist = maxOf(hitDistNeg, hitDistPos)
 
         /*
         if (Math.abs(smallestDist) < params.bias) {
@@ -32,7 +32,7 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
         if (smallestDist < 0 && biggestDist < 0) {
             return HitRay(iters)
         }
-        var hitDist: Double = 0.0
+        val hitDist: Double
         if (smallestDist > 0 && biggestDist> 0) {
             hitDist = smallestDist
         } else {
@@ -40,14 +40,14 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
         }
 
         /* TODO DEBUG */
-        if (params.debug) {
+        if (params.debug.global or params.debug.hitStack) {
             for (i in 1..iters) {
                 print("  ")
             }
             if (hitDist < 1) {
-                print("" + smallestDist + ";" + biggestDist + "; SMALL HITDIST!\n")
+                print("Shpere distances: " + smallestDist + "; " + biggestDist + "; SMALL HITDIST!\n")
             } else {
-                print("" + smallestDist + ";" + biggestDist + "\n")
+                print("Sphere distances: " + smallestDist + "; " + biggestDist + "\n")
             }
         }
         /* TODO DEBUG */
@@ -57,10 +57,14 @@ class Sphere(val center: Vector, val radius: Double, val material: Material) : O
 
         if (normalAtHit * dir > 0) {
             // Hitting from the inside
-            return HitRay(iters)
+            if (material.Kr == NON_REFRACTIVE_KR) {
+                return HitRay(iters)
+            }
+
+            return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, material.Kr, material, iters, name)
         }
 
-        return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, material, iters, name)
+        return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, incomingMediumKr, material, iters, name)
     }
 
     fun getNormalAt(point: Vector) : Vector {

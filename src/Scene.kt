@@ -5,14 +5,26 @@
 object Scene{
     val objects = ArrayList<Object>()
 
-    fun add(obj: Object) {
+    val environmentKr = AIR_KR
+
+    fun add(obj: Object) : Int{
+        val nextPosition = objects.size
         objects.add(obj)
+        return nextPosition
+    }
+
+    fun remove(idx: Int) {
+        objects.removeAt(idx)
+    }
+
+    fun clear() {
+        objects.clear()
     }
 
     fun trace(orig: Vector, dir: Vector, iters: Int) : HitRay {
         var firstHit = HitRay(iters)
         for (obj in objects) {
-            val tempHit = obj.trace(orig, dir, iters)
+            val tempHit = obj.trace(orig, dir, iters, environmentKr)
             if (tempHit.hit && tempHit.dist > 0 && tempHit.dist < firstHit.dist) {
                 /* TODO remove DEBUG */
                 //if (firstHit.name != "<Nothing>") {
@@ -22,7 +34,7 @@ object Scene{
                 firstHit = tempHit
             }
         }
-        if (params.debug) {
+        if (params.debug.global or params.debug.hitStack) {
             for (i in 1..iters) {
                 print("  ")
             }

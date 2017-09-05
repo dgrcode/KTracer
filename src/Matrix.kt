@@ -17,24 +17,24 @@ class Matrix(val a11: Double, val a12: Double, val a13: Double,
 
 }
 
-fun getRotationMatrixV2(phi: Double, theta: Double) : Matrix {
-    return Matrix(
-            sin(theta), cos(phi) * cos(theta), -sin(phi) * cos(theta),
-            -cos(theta), cos(phi) * sin(theta), -sin(phi) * sin(theta),
-            0.0, sin(phi), cos(phi)
-    )
-}
-
-fun getRotationMatirxV2(dir: Vector) : Matrix {
-    val dirProjection = Vector(dir.x, dir.y, 0.0)
-    val phi = Math.acos(dir * dirProjection)
-    val theta = Math.acos(Vector(1.0, 0.0, 0.0) * dirProjection)
-    return getRotationMatrixV2(phi, theta)
-}
+//fun getRotationMatrixV2(phi: Double, theta: Double) : Matrix {
+//    return Matrix(
+//            sin(theta), cos(phi) * cos(theta), -sin(phi) * cos(theta),
+//            -cos(theta), cos(phi) * sin(theta), -sin(phi) * sin(theta),
+//            0.0, sin(phi), cos(phi)
+//    )
+//}
+//
+//fun getRotationMatirxV2(dir: Vector) : Matrix {
+//    val dirProjection = Vector(dir.x, dir.y, 0.0)
+//    val phi = Math.acos(dir * dirProjection)
+//    val theta = Math.acos(Vector(1.0, 0.0, 0.0) * dirProjection)
+//    return getRotationMatrixV2(phi, theta)
+//}
 
 fun getRotationMatirx(dir: Vector) : Matrix {
     val localY = dir.normalize()
-    val localX = Vector(localY.y, -localY.x, 0.0).normalize()
+    val localX = localY.crossProduct(Vector(0.0, 0.0, 1.0)).normalize()//Vector(localY.y, -localY.x, 0.0).normalize()
     val localZ = localX.crossProduct(localY).normalize()
     return Matrix(
             localX.x, localY.x, localZ.x,

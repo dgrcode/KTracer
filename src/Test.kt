@@ -1,27 +1,36 @@
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by daniel on 21/07/17.
  */
+
+val toDelete = ArrayList<Int>()
 
 fun main(args: Array<String>) {
     val v = Vector(0.0, 0.0, 1.0)
     println(v.randomCentered().toString())
 }
 
-fun showVectorAt(v: Vector, p: Vector, albedo: Albedo) {
-    showVectorAt(v, p, albedo, 10.0)
+fun showVectorAt(position: Vector, direction: Vector, albedo: Albedo) {
+    showVectorAt(position, direction, albedo, 10.0)
 }
 
-fun showVectorAt(v: Vector, p: Vector, albedo: Albedo, length: Double, radius: Double = params.debRadius) {
+fun showVectorAt(position: Vector, direction: Vector, albedo: Albedo, length: Double, radius: Double = params.debRadius) {
     //for (j in 0..(length / (radius * 2)).toInt() step Math.max((length / 10).toInt(), 1)) {
     for (j in 0..10) {
-        val pCenter = p + v * j * (length / 10)
+        val pCenter = position + direction * j * (length / 10)
+//        print("  " + pCenter)
         Scene.add(Sphere(pCenter, radius, Material(albedo, 0f)))
     }
 }
 
-fun debugs(pixelVector: Vector = Vector()) {
+
+fun debugs(vector: Vector) {debugs(vector)}
+fun debugs(imagePlane: Lens) {
+    debugs(Vector(), imagePlane)
+}
+fun debugs(pixelVector: Vector = Vector(), imagePlane: Lens = lens) {
     //printRandomNormals()
 
     //printRandomReflections()
@@ -30,7 +39,10 @@ fun debugs(pixelVector: Vector = Vector()) {
 
     //printRotationMatrix()
 
-    //printCameraPosition()
+    //printCameraPositionHorizontal()
+
+    //printCameraPositionVertical()
+    printImagePlane(imagePlane)
 }
 
 fun printRandomNormals() {
@@ -39,7 +51,7 @@ fun printRandomNormals() {
         var hitObject = "none"
         var hitRay = HitRay(0)
         while (hitObject != "sphere") {
-            val pixel = lens.getRandomPixel();
+            val pixel = lens.getRandomPixel()
             val rayDir = pixel.getRandomPoint() - camera.position
             hitRay = Scene.trace(camera.position, rayDir, 0)
             hitObject = hitRay.name
@@ -67,7 +79,7 @@ fun printRandomReflections() {
         var hitObject = "none"
         var hitRay = HitRay(0)
         while (hitObject != "sphere") {
-            val pixel = lens.getRandomPixel();
+            val pixel = lens.getRandomPixel()
             val rayDir = pixel.getRandomPoint() - camera.position
             hitRay = Scene.trace(camera.position, rayDir, 0)
             hitObject = hitRay.name
@@ -115,19 +127,7 @@ fun printVectorTracing(pixelVector: Vector) {
     println("Finished with the tracing")
 }
 
-fun printRotationMatrix() {
-    val v = Vector(0.0, 1.0, 0.0)
-    println("Con vector")
-    println(getRotationMatirxV2(v))
-
-    println("Con angulos")
-    println(getRotationMatrixV2(0.0, Math.PI / 2))
-
-    println("Elegante")
-    println(getRotationMatirx(v))
-}
-
-fun printCameraPosition() {
+fun printCameraPositionHorizontal() {
     for (frame in 0..59) {
         val alpha = frame * 6 * Math.PI / 180
         val x = 1500 * sin(alpha)
@@ -153,3 +153,53 @@ fun printCameraPosition() {
 
     //Scene.add(Sphere(Vector(.0, .0, .0), 00.0, Material(Albedo(1f, 0f, .5f), 0f)))
 }
+
+fun printCameraPositionVertical() {
+    for (frame in 0..19) {
+        val alpha = frame * 4.5 * Math.PI / 180
+        val z = 1200 * sin(alpha)
+        val y = 1200 * cos(alpha)
+
+        val position = Vector(0.0, y, z)
+        val direction = Vector(0.0, -y, -z).normalize()
+        val rotMatrix = getRotationMatirx(direction)
+        val topLens = position + direction * 1000 + rotMatrix * Vector(-50.0, 0.0, 0.0)
+        val bottomLensDirection = rotMatrix * Vector(0.0, 0.0, -1.0)
+
+//        Scene.add(Sphere(topLens, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+//        Scene.add(Sphere(topLens + bottomLensDirection * 20, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+//        Scene.add(Sphere(topLens + bottomLensDirection * 40, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+//        Scene.add(Sphere(topLens + bottomLensDirection * 60, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+//        Scene.add(Sphere(topLens + bottomLensDirection * 80, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+//        Scene.add(Sphere(topLens + bottomLensDirection * 100, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
+
+        //println("" + position + "; " + direction  + "; " + leftLens)
+        showVectorAt(topLens, bottomLensDirection, Albedo(1f, 0f, 1f), 100.0, 5.0)
+//        println("")
+        showVectorAt(position, direction, Albedo(0f, 0f, 1f), 1000.0, 10.0)
+    }
+
+    //Scene.add(Sphere(Vector(.0, .0, .0), 00.0, Material(Albedo(1f, 0f, .5f), 0f)))
+}
+
+fun printImagePlane(imagePlane: Lens) {
+    showVectorAt(imagePlane.cameraPos, (-imagePlane.cameraPos).normalize(), Albedo(0f, 0f, 1f), 500.0, 10.0)
+    for (pixRow in imagePlane.pixels) {
+        for (pix in pixRow) {
+            Scene.add(Sphere(pix.center(), 5.0, Material(Albedo(1f, 0f, 1f), 0f)))
+        }
+    }
+
+}
+
+//fun printRotationMatrix() {
+//    val v = Vector(0.0, 1.0, 0.0)
+//    println("Con vector")
+//    println(getRotationMatirxV2(v))
+//
+//    println("Con angulos")
+//    println(getRotationMatrixV2(0.0, Math.PI / 2))
+//
+//    println("Elegante")
+//    println(getRotationMatirx(v))
+//}
