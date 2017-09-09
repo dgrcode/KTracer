@@ -30,15 +30,15 @@ Another optimization in speed that this algorithm has over the real light, is th
 
 ### Features
 There are a few of features already implemented.
- * Materials with light-diffusion
+ * Materials with light-diffusion  
    ![light diffusion](./RENDERS/toReadme/diffusive.jpg)
- * Materials with light-reflection
+ * Materials with light-reflection  
    ![light reflection](./RENDERS/toReadme/reflection.jpg)
- * Materials with light-refraction
+ * Materials with light-refraction  
    ![light refraction](./RENDERS/toReadme/refraction.jpg)
  * Movable camera
  * Frames renderer
- * Depth of field
+ * Depth of field  
    ![depth of field](./RENDERS/toReadme/dof.jpg)
  * Some rendering performance optimization
 
@@ -47,4 +47,3 @@ So far I've implemented some features. However, I want to add a few things:
  * Better rendering performance optimization
  * Directional light
  * Support for other shapes
- 
