@@ -8,12 +8,16 @@ import java.awt.image.BufferedImage
  */
 
 object params {
-    val iterPerPixel = 5
+    val iterPerPixel = 300
     val recursionLimit = 25
-    val xRes = 300
-    val yRes = 300
+    val xRes = 600
+    val yRes = 400
     val debRadius = 0.5
     val bias = 0.001
+
+    val optimizeIters = true
+    val colorTolerance = 5.0
+    val rechecks = 0.2 // probability of rechecking a supposedly finished pixel
 
     object debug {
         val global = false
@@ -24,39 +28,35 @@ object params {
         val refractionGlobal = false
         val refractionAngle = false
 
+        // field of view
+        val fieldOfView = false
+
         val refraction = refractionGlobal or refractionAngle
         val any = global or hitStack or recursionLimit or refraction
     }
 }
 
-object camera {
-    var position = Vector(.0, -10000.0, 2000.0) / 10.0
-
-    fun moveTo(newPosition: Vector) {
-        position = newPosition
-    }
-}
-
-val lens = Lens(camera.position, Vector(.0, 2500.0, -450.0).normalize(), 1000.0, 1000.0, params.xRes, params.yRes)
+val lens = Lens(Vector(61.5, -316.5, 50.0), GeometryCircle(0.0))
+val focalDist: Double = 166.5
+val sensor = Sensor(Vector(.0, 1.0, .0).normalize(), 316.1, 523.2, params.xRes, params.yRes)
 
 fun main(args: Array<String>) {
-    //Scene.add(Sphere(Vector(-10.0, 40.0, 10.0), 10.0, Material(Albedo(.1f, .2f, .9f), .5f)))
-    Scene.add(Sphere(Vector(0.0, 0.0, 250.0), 200.0, Material(Albedo(.9f, .4f, .2f), .4f, ZIRCONIA_KR)))
-    //Scene.add(Sphere(Vector(15.0, -25.0, 30.0), 15.0, Material(Albedo(.1f, .9f, .2f), .1f)))
-    //Scene.add(Sphere(Vector(-30.0, 50.0, 15.0), 10.0, Material(Albedo(.1f, .9f, .2f), .9f)))
-    //Scene.add(Sphere(Vector(.0, -700.0, 300.0), 300.0, Material(Albedo(.3f, .3f, 1f), .3f)))
-    Scene.add(Sky(Color(1f, 1f, 1f)))
-    Scene.add(Plane(Vector(0.0, 0.0, -10.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), .0f)))
-    //Scene.add(Sphere(Vector(0.0, -1500.0, 200.0), 50.0, Material(Albedo(1f, 0f, 0f), 0f)))
+    Scene.add(Sphere(Vector(61.5, -150.0, 30.0), 30.0, Material.GOLD))
+    Scene.add(Sphere(Vector(150.0, -100.0, 70.0), 30.0, Material.GOLD))
+    Scene.add(Sphere(Vector(-10.0, -100.0, 80.0), 30.0, Material.GOLD))
+    Scene.add(Sphere(Vector(0.0, 100.0, 100.0), 100.0, Material.GOLD))
+    Scene.add(Sphere(Vector(173.0, .0, 120.0), 50.0, Material.GOLD))
+    Scene.add(Sky(Color(1.5f, 1.5f, 1.5f)))
+    Scene.add(Plane(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), .0f)))
 
     val cpos = Vector(.0, 1.0, 1.0) * 1200.0
 
-    val colorMatrix = lens.render()
+    val colorMatrix = sensor.render()
 
-    val image = BufferedImage(lens.xRes, lens.yRes, BufferedImage.TYPE_INT_RGB)
+    val image = BufferedImage(sensor.xRes, sensor.yRes, BufferedImage.TYPE_INT_RGB)
 
-    for (i in 0..lens.yRes - 1) {
-        for (j in 0..lens.xRes - 1) {
+    for (i in 0..sensor.yRes - 1) {
+        for (j in 0..sensor.xRes - 1) {
             image.setRGB(j, i, colorMatrix[i][j].toRGB().toIntColor())
         }
     }

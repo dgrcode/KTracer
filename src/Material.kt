@@ -244,6 +244,10 @@ class Material(val isLight: Boolean, val color: Color, val albedo: Albedo, val r
         }
         return criticalAngle
     }
+
+    companion object {
+        val GOLD = Material(Albedo(0.898f, 0.749f, 0.396f), 0.4f)
+    }
 }
 
 //data class Refractivity(val chance: Float, val medium: Medium)

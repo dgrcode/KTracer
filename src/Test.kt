@@ -8,8 +8,9 @@ import kotlin.collections.ArrayList
 val toDelete = ArrayList<Int>()
 
 fun main(args: Array<String>) {
-    val v = Vector(0.0, 0.0, 1.0)
-    println(v.randomCentered().toString())
+    val c1 = ColorRGB(20, 20, 20)
+    val c2 = ColorRGB(20, 20, 63)
+    println(c1 - c2)
 }
 
 fun showVectorAt(position: Vector, direction: Vector, albedo: Albedo) {
@@ -27,10 +28,10 @@ fun showVectorAt(position: Vector, direction: Vector, albedo: Albedo, length: Do
 
 
 fun debugs(vector: Vector) {debugs(vector)}
-fun debugs(imagePlane: Lens) {
+fun debugs(imagePlane: Sensor) {
     debugs(Vector(), imagePlane)
 }
-fun debugs(pixelVector: Vector = Vector(), imagePlane: Lens = lens) {
+fun debugs(pixelVector: Vector = Vector(), imagePlane: Sensor = sensor) {
     //printRandomNormals()
 
     //printRandomReflections()
@@ -51,9 +52,9 @@ fun printRandomNormals() {
         var hitObject = "none"
         var hitRay = HitRay(0)
         while (hitObject != "sphere") {
-            val pixel = lens.getRandomPixel()
-            val rayDir = pixel.getRandomPoint() - camera.position
-            hitRay = Scene.trace(camera.position, rayDir, 0)
+            val pixel = sensor.getRandomPixel()
+            val rayDir = pixel.getRandomPoint() - lens.center
+            hitRay = Scene.trace(lens.center, rayDir, 0)
             hitObject = hitRay.name
         }
         val hitPoint = hitRay.dir * hitRay.dist
@@ -79,9 +80,9 @@ fun printRandomReflections() {
         var hitObject = "none"
         var hitRay = HitRay(0)
         while (hitObject != "sphere") {
-            val pixel = lens.getRandomPixel()
-            val rayDir = pixel.getRandomPoint() - camera.position
-            hitRay = Scene.trace(camera.position, rayDir, 0)
+            val pixel = sensor.getRandomPixel()
+            val rayDir = pixel.getRandomPoint() - lens.center
+            hitRay = Scene.trace(lens.center, rayDir, 0)
             hitObject = hitRay.name
         }
         val hitPoint = hitRay.dir * hitRay.dist
@@ -101,13 +102,13 @@ fun printRandomReflections() {
 fun printVectorTracing(pixelVector: Vector) {
     println("Generating vector tracing")
 
-    var dir = pixelVector - camera.position
-    var hitRay = Scene.trace(camera.position, dir, 0)
+    var dir = pixelVector - lens.center
+    var hitRay = Scene.trace(lens.center, dir, 0)
     while (hitRay.name != "sphere") {
-        dir = lens.getRandomPixel().center() - camera.position
-        hitRay = Scene.trace(camera.position, dir, 0)
+        dir = sensor.getRandomPixel().center() - lens.center
+        hitRay = Scene.trace(lens.center, dir, 0)
     }
-    //showVectorAt(dir, camera.position, Albedo(1f), hitRay.dist, 1.0)
+    //showVectorAt(dir, lens.center, Albedo(1f), hitRay.dist, 1.0)
     val stack = Stack<Sphere>()
     for (i in 1..10) {
         println(hitRay.name)
@@ -146,9 +147,9 @@ fun printCameraPositionHorizontal() {
         Scene.add(Sphere(leftLens + rightLensDirection * 80, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
         Scene.add(Sphere(leftLens + rightLensDirection * 100, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
 
-        //println("" + position + "; " + direction  + "; " + leftLens)
+        //println("" + center + "; " + direction  + "; " + leftLens)
         //showVectorAt(leftLens, rightLensDirection, Albedo(1f, 0f, 1f), 100.0, 40.0)
-        //showVectorAt(position, direction, Albedo(0f, 0f, 1f), 500.0, 40.0)
+        //showVectorAt(center, direction, Albedo(0f, 0f, 1f), 500.0, 40.0)
     }
 
     //Scene.add(Sphere(Vector(.0, .0, .0), 00.0, Material(Albedo(1f, 0f, .5f), 0f)))
@@ -173,7 +174,7 @@ fun printCameraPositionVertical() {
 //        Scene.add(Sphere(topLens + bottomLensDirection * 80, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
 //        Scene.add(Sphere(topLens + bottomLensDirection * 100, 10.0, Material(Albedo(1f, 0f, 0f), 0f)))
 
-        //println("" + position + "; " + direction  + "; " + leftLens)
+        //println("" + center + "; " + direction  + "; " + leftLens)
         showVectorAt(topLens, bottomLensDirection, Albedo(1f, 0f, 1f), 100.0, 5.0)
 //        println("")
         showVectorAt(position, direction, Albedo(0f, 0f, 1f), 1000.0, 10.0)
@@ -182,8 +183,8 @@ fun printCameraPositionVertical() {
     //Scene.add(Sphere(Vector(.0, .0, .0), 00.0, Material(Albedo(1f, 0f, .5f), 0f)))
 }
 
-fun printImagePlane(imagePlane: Lens) {
-    showVectorAt(imagePlane.cameraPos, (-imagePlane.cameraPos).normalize(), Albedo(0f, 0f, 1f), 500.0, 10.0)
+fun printImagePlane(imagePlane: Sensor) {
+    showVectorAt(lens.center, (-lens.center).normalize(), Albedo(0f, 0f, 1f), 500.0, 10.0)
     for (pixRow in imagePlane.pixels) {
         for (pix in pixRow) {
             Scene.add(Sphere(pix.center(), 5.0, Material(Albedo(1f, 0f, 1f), 0f)))

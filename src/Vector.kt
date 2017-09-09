@@ -5,7 +5,7 @@ import java.util.*
  */
 
 class Vector(val x: Double, val y: Double, val z: Double) {
-    constructor() : this (0.0, 0.0, 0.0) // TODO is this ok?
+    constructor() : this (0.0, 0.0, 0.0)
 
     operator fun plus(v: Vector) : Vector {
         return Vector(x + v.x, y + v.y, z + v.z)

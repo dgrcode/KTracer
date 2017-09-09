@@ -1,5 +1,5 @@
 interface CameraMovement{
-    // TODO make the camera movements composable. For example: Rotation of the angle + translation linear
+    // TODO make the lens movements composable. For example: Rotation of the angle + translation linear
     fun cameraUpdater() : (Int) -> Pair<Vector, Vector>
 }
 
