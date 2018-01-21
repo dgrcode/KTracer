@@ -15,5 +15,12 @@
  */
 
 interface Object{
+    val type: Object.TYPE
     fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double) : HitRay
+
+    enum class TYPE {
+        LIGHT,
+        DIRECTIONAL_LIGHT,
+        OBJECT
+    }
 }

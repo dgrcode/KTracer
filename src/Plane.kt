@@ -4,6 +4,7 @@
 
 class Plane(val pointInPlane: Vector, val normal: Vector, val material: Material) : Object {
     val name = "plane"
+    override val type = Object.TYPE.OBJECT
 
     override fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double): HitRay {
         val dirNormalized = dir.normalize()

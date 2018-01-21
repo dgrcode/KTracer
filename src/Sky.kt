@@ -4,6 +4,7 @@
 
 class Sky(val light: Color) : Object {
     val name = "light"
+    override val type = Object.TYPE.LIGHT
 
     override fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double): HitRay {
         //if (dir.z < 0) return HitRay(iters)

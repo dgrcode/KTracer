@@ -4,6 +4,7 @@
 
 class Sphere(val center: Vector, val radius: Double, val material: Material) : Object {
     val name = "sphere"
+    override val type = Object.TYPE.OBJECT
 
     override fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double): HitRay {
         val dirNormalized = dir.normalize()
