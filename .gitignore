@@ -5,7 +5,20 @@
 # Compiled files
 /out
 
+# Artifacts
+ARTIFACTS/
+
+# 3D Models
+3DMODELS/
+
 # Movie frames
 movieFrames/
 *.bmp
-!RENDERS/*.bmp
+!RENDERS/toReadme/*.bmp
+
+# Movies
+*.mp4
+*.gif
+
+# Main render output
+output.bmp
