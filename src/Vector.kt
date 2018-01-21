@@ -71,7 +71,7 @@ class Vector(val x: Double, val y: Double, val z: Double) {
             cand = -cand
         }
 
-        return cand
+        return cand.normalize()
     }
 
     fun reflectionWithNormal(normal: Vector) : Vector {
