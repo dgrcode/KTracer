@@ -1,4 +1,4 @@
-import java.util.*
+import java.util.Random
 
 /**
  * Created by daniel on 20/07/17.
@@ -39,8 +39,13 @@ class Vector(val x: Double, val y: Double, val z: Double) {
         return Vector(x / n, y / n, z / n)
     }
 
+    fun equals(v: Vector) : Boolean {
+        // TODO maybe override equals() in the future?
+        return x == v.x && y == v.y && z == v.z
+    }
+
     override fun toString() : String {
-        return "[ " + x + ", " + y + ", " + z + " ]"
+        return "[ $x, $y, $z ]"
     }
 
     fun modulo() : Double {
@@ -91,7 +96,7 @@ class Vector(val x: Double, val y: Double, val z: Double) {
     }
 
     fun isPerpendicularTo(v: Vector) : Boolean {
-        return (this * v) / modulo() / v.modulo() == .0
+        return this * v == .0
     }
 }
 
