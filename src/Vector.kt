@@ -89,4 +89,10 @@ class Vector(val x: Double, val y: Double, val z: Double) {
 
         return this * refractivityRelation + refrNormal * (cosIncoming * refractivityRelation - Math.sqrt(1 - sinRefractedPw2))
     }
+
+    fun isPerpendicularTo(v: Vector) : Boolean {
+        return (this * v) / modulo() / v.modulo() == .0
+    }
 }
+
+// TODO create normalized vector class to be able to use the typesystem to check that the vector we're passing around is actually a normalized one
