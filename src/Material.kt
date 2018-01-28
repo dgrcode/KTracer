@@ -247,6 +247,9 @@ class Material(val isLight: Boolean, val color: Color, val albedo: Albedo, val r
 
     companion object {
         val GOLD = Material(Albedo(0.898f, 0.749f, 0.396f), 0.4f)
+        fun diffuseColor(albedo: Albedo) : Material {
+            return Material(albedo, 0f)
+        }
     }
 }
 
