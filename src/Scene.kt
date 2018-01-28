@@ -42,4 +42,25 @@ object Scene{
         }
         return firstHit
     }
+
+    fun addStdScene() {
+        add(Sphere(Vector(61.5, -150.0, 30.0), 30.0, Material.GOLD))
+        add(Sphere(Vector(150.0, -100.0, 70.0), 30.0, Material.GOLD))
+        add(Sphere(Vector(-10.0, -100.0, 80.0), 30.0, Material.GOLD))
+        add(Sphere(Vector(0.0, 100.0, 100.0), 100.0, Material.GOLD))
+        add(Sphere(Vector(173.0, .0, 120.0), 50.0, Material.GOLD))
+        addEnvironment()
+    }
+
+    fun addEnvironment() {
+        addSky()
+        addGround()
+    }
+    fun addSky() {
+        add(Sky(Color(1.5f, 1.5f, 1.5f)))
+    }
+
+    fun addGround() {
+        add(Plane(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), .0f)))
+    }
 }
