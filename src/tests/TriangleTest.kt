@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.Test
+
 internal class TriangleTest {
 
     val origin = Vector(.0, .0, .0)
@@ -14,21 +16,21 @@ internal class TriangleTest {
             material
     )
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun getName() {
         assert(triangle.name.equals("triangle"), {
             "Name should always be 'triangle'"
         })
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun getType() {
         assert(triangle.type.equals(Object.TYPE.OBJECT), {
             "Type should always be Object"
         })
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun getNormal() {
         assert((triangle.v0 - triangle.v1).isPerpendicularTo(triangle.normal), {
             "The normal should be perpendicular to the edges"
@@ -41,7 +43,7 @@ internal class TriangleTest {
         })
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun trace() {
         // ray from the center of the triangle
         val centerHitRay = triangle.trace(
@@ -71,17 +73,28 @@ internal class TriangleTest {
         })
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun hitDistance() {
        // probably not needed if trace() works as expected, as this is actually a subroutine of that method
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun getNormalAt() {
-        assert(triangle.normal == triangle.getNormalAt(v0))
+        val triangleWithKnownNormal = Triangle(
+                Vector(10.0, 20.0, 30.0),
+                Vector(-10.0, -20.0, 30.0),
+                Vector(20.0, 20.0, 30.0),
+                material
+        )
+        assert(triangleWithKnownNormal.normal.equals(Vector(.0, .0, 1.0)), {
+            "The normal was expected to be k, but it was ${triangleWithKnownNormal.normal}"
+        })
+        assert(triangle.normal.modulo() == 1.0, {
+            "The normal has modulo 1"
+        })
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     fun getMaterial() {
         assert(triangle.material == material)
     }

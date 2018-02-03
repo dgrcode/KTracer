@@ -10,7 +10,7 @@ class Triangle(val v0: Vector, val v1: Vector, val v2: Vector, val material: Mat
 
     val edge1: Vector = v1 - v0
     val edge2: Vector = v2 - v0
-    val normal: Vector = edge1.crossProduct(edge2)
+    val normal: Vector = edge1.crossProduct(edge2).normalize()
 
     override fun trace(orig: Vector, dir: Vector, iters: Int, incomingMediumKr: Double): HitRay {
         val dirNormalized = dir.normalize()
@@ -68,7 +68,7 @@ class Triangle(val v0: Vector, val v1: Vector, val v2: Vector, val material: Mat
 
     fun getNormalAt(point: Vector) : Vector {
         // So far I don't do smooth normals
-        return normal
+        return normal.normalize()
     }
 
     fun getPlaneContainer() : Plane {
