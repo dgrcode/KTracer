@@ -33,6 +33,10 @@ class Color(val r: Float, val g: Float, val b: Float) {
         return c1Lab - c2Lab
     }
 
+    override fun toString() : String {
+        return "[r: $r, g: $g, b: $b]"
+    }
+
     fun max() : Float {
         return Math.max(Math.max(r, g) , b)
     }
