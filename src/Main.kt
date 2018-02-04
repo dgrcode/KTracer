@@ -10,8 +10,9 @@ import java.awt.image.BufferedImage
 object params {
     val iterPerPixel = 300
     val recursionLimit = 25
-    val xRes = 600
-    val yRes = 400
+    val resolutionSize = 100
+    val xRes = 6 * resolutionSize
+    val yRes = 4 * resolutionSize
     val debRadius = 0.5
     val bias = 0.001
 
@@ -21,7 +22,7 @@ object params {
 
     object debug {
         val global = false
-        val hitStack =false
+        val hitStack = false
         val recursionLimit = false
 
         // refraction
@@ -41,15 +42,21 @@ val focalDist: Double = 166.5
 val sensor = Sensor(Vector(.0, 1.0, .0).normalize(), 316.1, 523.2, params.xRes, params.yRes)
 
 fun main(args: Array<String>) {
-    Scene.add(Sphere(Vector(61.5, -150.0, 30.0), 30.0, Material.GOLD))
-    Scene.add(Sphere(Vector(150.0, -100.0, 70.0), 30.0, Material.GOLD))
-    Scene.add(Sphere(Vector(-10.0, -100.0, 80.0), 30.0, Material.GOLD))
-    Scene.add(Sphere(Vector(0.0, 100.0, 100.0), 100.0, Material.GOLD))
-    Scene.add(Sphere(Vector(173.0, .0, 120.0), 50.0, Material.GOLD))
-    Scene.add(Sky(Color(1.5f, 1.5f, 1.5f)))
-    Scene.add(Plane(Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0), Material(Albedo(.8f, .8f, .8f), .0f)))
-
-    val cpos = Vector(.0, 1.0, 1.0) * 1200.0
+    Scene.add(
+            Sphere(
+                    Vector(150.0, -200.0, 70.0),
+                    30.0,
+                    Material(Color(1f, .3f, .3f))
+            )
+    )
+    Pyramid(
+            Vector(150.0, -100.0, 0.0),
+            Vector(61.5, -150.0, 0.0),
+            Vector(-10.0, -100.0, 0.0),
+            Vector(70.0, -120.0, 80.0),
+            Material(Albedo(.3f, 1f, .5f), 0f)
+    ).addToScene()
+    Scene.addEnvironment()
 
     val colorMatrix = sensor.render()
 

@@ -19,7 +19,6 @@ class Triangle(val v0: Vector, val v1: Vector, val v2: Vector, val material: Mat
         if (!isHit) return HitRay(iters)
 
         val hitPoint = orig + dirNormalized * hitDist
-        val normalAtHit = getNormalAt(hitPoint)
 
         /*
         //This can be used in the future to only show the triangle if it's hit from one side
@@ -33,6 +32,13 @@ class Triangle(val v0: Vector, val v1: Vector, val v2: Vector, val material: Mat
             return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, material.Kr, material, iters, name)
         }
         */
+
+        // The normal will be always pointing towards the incoming ray. This behavior must be changed to implement
+        // refraction with triangles
+        var normalAtHit = getNormalAt(hitPoint)
+        if (normalAtHit * dir > 0) {
+            normalAtHit *= -1
+        }
 
         return HitRay(true, orig, dirNormalized, hitDist, normalAtHit, incomingMediumKr, material, iters, name)
     }
